@@ -1,0 +1,22 @@
+on:
+  push:
+  pull_request_target:
+
+
+jobs:
+  main:
+    runs-on: ubuntu-16.04
+    timeout-minutes: 5
+
+    steps:
+      - uses: actions/checkout@v2
+        name: Checkout ${{github.event.pull_request.head.repo.full_name}} --> ${{github.event.pull_request.head.ref}}
+        if: ${{ github.event.pull_request.head.ref != "" }}
+        with:
+          ref: ${{github.event.pull_request.head.ref}}
+          repository: ${{github.event.pull_request.head.repo.full_name}}
+
+      - uses: actions/checkout@v2
+        if: ${{ github.event.pull_request.head.ref == "" }}
+
+      - run: main.sh
